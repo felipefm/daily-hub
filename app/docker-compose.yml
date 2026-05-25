@@ -1,0 +1,15 @@
+name: daily-hub
+services:
+  api:
+    image: python:3.11-slim
+    container_name: daily-hub-api
+    # Troque o caminho abaixo para o caminho absoluto da sua pasta no CasaOS, se for diferente.
+    volumes:
+      - /DATA/AppData/daily-hub/app:/app
+    working_dir: /app
+    ports:
+      - "8080:8000"
+    command: >
+      bash -c "pip install --no-cache-dir fastapi uvicorn sqlalchemy requests pydantic reportlab && 
+      uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+    restart: unless-stopped

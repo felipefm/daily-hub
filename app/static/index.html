@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily-HUB</title>
+    <link rel="icon" type="image/png" href="https://icon.casaos.io/main/all/api.png">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#4F46E5">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sans min-h-screen p-6 transition-colors duration-200">
+    <div class="max-w-2xl mx-auto mt-4 md:mt-10 px-2 md:px-0">
+        <h1 class="text-3xl font-bold mb-8 text-center text-indigo-600 dark:text-indigo-400">Daily-HUB</h1>
+        
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8 border border-gray-100 dark:border-gray-700">
+            <form id="task-form" class="flex flex-col gap-3">
+                <div class="flex flex-col md:flex-row gap-3 items-center">
+                    <input type="text" id="task-title" placeholder="O que precisa ser feito hoje?" required
+                        class="flex-1 px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    
+                    <div class="flex flex-row justify-center md:justify-start items-center gap-2">
+                        <button type="button" onclick="togglePrintSection()" class="text-gray-400 hover:text-indigo-500 transition-colors px-2" title="Central de Impressão">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 00-2 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                            </svg>
+                        </button>
+
+                        <button type="button" onclick="toggleAdvanced()" class="text-gray-400 hover:text-indigo-500 transition-colors px-2" title="Opções de Recorrência">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                            </svg>
+                        </button>
+
+                        <button type="button" onclick="toggleHabitDashboard()" class="text-gray-400 hover:text-indigo-500 transition-colors px-2" title="Rastreador de Hábitos">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3H5a2 2 0 00-2 2v4m0 0a2 2 0 002 2h4m0 0a2 2 0 002-2V5a2 2 0 00-2-2m0 0V3m0 0H9m11 0v4a2 2 0 01-2 2h-4m0 0a2 2 0 01-2-2v-4m0 0a2 2 0 012-2h4a2 2 0 012 2v4m0 0v4a2 2 0 01-2 2h-4m-6-2v4a2 2 0 002 2h4a2 2 0 002-2v-4" />
+                            </svg>
+                        </button>
+
+                        <button type="button" onclick="toggleDevotional()" class="text-gray-400 hover:text-indigo-500 transition-colors px-2" title="Espaço Devocional">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M4 4c0-1.1.9-2 2-2h4v2H6v14h6v2H6c-1.1 0-2-.9-2-2V4zm10 0h4V2h4c1.1 0 2 .9 2 2v16c0 1.1-.9 2-2 2h-6v-2h6V4h-4V4z" />
+                            </svg>
+                        </button>
+
+                        <button type="button" onclick="toggleAIPanel()" class="text-gray-400 hover:text-indigo-500 transition-colors px-2" title="Mentor IA">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-md font-semibold transition-colors">
+                        Adicionar
+                    </button>
+                </div>
+
+                <div id="advanced-options" class="hidden mt-2 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-md border border-gray-200 dark:border-gray-600 flex flex-col gap-4">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-2 w-full">
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Repetir esta tarefa:</span>
+                        <div id="recurrence-container"></div>
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs text-gray-500 uppercase">Data da Tarefa</label>
+                            <input type="date" id="task-date" class="px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm">
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-gray-200 dark:border-gray-600 w-full">
+                        <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Backup e Restauração</h3>
+                        <p class="text-xs text-gray-500 mb-3">Exporte ou importe o banco de dados. A importação substitui todos os dados atuais.</p>
+                        <div class="flex gap-2">
+                            <button type="button" id="export-backup-btn" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-semibold transition-colors">Exportar</button>
+                            <label for="import-backup-input" class="cursor-pointer bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-semibold transition-colors">Importar</label>
+                            <input type="file" id="import-backup-input" accept=".db,.sqlite" class="hidden">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <section id="habit-dashboard" class="hidden bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-100 dark:border-gray-700 mb-8 overflow-hidden">
+            <div class="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-700">
+                <h2 class="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
+                    📅 Controle de Hábitos
+                </h2>
+                <div class="text-sm font-medium text-gray-600 dark:text-gray-400" id="habit-current-month">
+                    Maio 2026
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead class="bg-gray-50 dark:bg-gray-700/50 sticky top-0 z-10">
+                        <tr>
+                            <th class="px-4 py-2 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600 w-40">Hábito</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">1</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">2</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">3</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">4</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">5</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">6</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">7</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">8</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">9</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">10</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">11</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">12</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">13</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">14</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">15</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">16</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">17</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">18</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">19</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">20</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">21</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">22</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">23</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">24</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">25</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">26</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">27</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">28</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">29</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">30</th>
+                            <th class="px-1 py-2 text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 min-w-[32px]">31</th>
+                        </tr>
+                    </thead>
+                    <tbody id="habit-matrix-body" class="divide-y divide-gray-200 dark:divide-gray-700">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="devotional-screen" class="hidden bg-stone-50 dark:bg-gray-800/60 rounded-xl shadow-inner border border-stone-200/60 dark:border-gray-700/50 p-8 mb-8 max-w-3xl mx-auto">
+            <nav class="flex justify-center gap-6 border-b border-stone-200 dark:border-gray-700 mb-8 overflow-x-auto pb-4">
+                <button onclick="switchDevoTab('leituras')" id="btn-tab-leituras" class="pb-3 text-sm font-medium transition-colors whitespace-nowrap text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-400">
+                    Leituras
+                </button>
+                <button onclick="switchDevoTab('salmo')" id="btn-tab-salmo" class="pb-3 text-sm font-medium transition-colors whitespace-nowrap text-stone-400 hover:text-stone-600 dark:text-stone-500 dark:hover:text-stone-300">
+                    Salmo
+                </button>
+                <button onclick="switchDevoTab('evangelho')" id="btn-tab-evangelho" class="pb-3 text-sm font-medium transition-colors whitespace-nowrap text-stone-400 hover:text-stone-600 dark:text-stone-500 dark:hover:text-stone-300">
+                    Evangelho
+                </button>
+                <button onclick="switchDevoTab('santo')" id="btn-tab-santo" class="pb-3 text-sm font-medium transition-colors whitespace-nowrap text-stone-400 hover:text-stone-600 dark:text-stone-500 dark:hover:text-stone-300">
+                    Santo do Dia
+                </button>
+                <button onclick="switchDevoTab('homilia')" id="btn-tab-homilia" class="pb-3 text-sm font-medium transition-colors whitespace-nowrap text-stone-400 hover:text-stone-600 dark:text-stone-500 dark:hover:text-stone-300">
+                    Homilia
+                </button>
+            </nav>
+
+            <div id="tab-leituras" class="font-serif text-stone-800 dark:text-stone-200 leading-loose max-w-2xl mx-auto text-justify">
+                <p id="devo-leituras"></p>
+            </div>
+
+            <div id="tab-salmo" class="hidden font-serif text-stone-800 dark:text-stone-200 leading-loose max-w-2xl mx-auto text-justify">
+                <p id="devo-salmo"></p>
+            </div>
+
+            <div id="tab-evangelho" class="hidden font-serif text-stone-800 dark:text-stone-200 leading-loose max-w-2xl mx-auto text-justify">
+                <p id="devo-evangelho"></p>
+            </div>
+
+            <div id="tab-santo" class="hidden font-serif text-stone-800 dark:text-stone-200 leading-loose max-w-2xl mx-auto text-justify">
+                <p id="devo-santo"></p>
+            </div>
+
+            <div id="tab-homilia" class="hidden font-serif text-stone-800 dark:text-stone-200 leading-loose max-w-2xl mx-auto text-justify">
+                <p id="devo-homilia"></p>
+            </div>
+
+            <div class="mt-10 pt-6 border-t border-stone-200/60 dark:border-gray-700/50 flex justify-center">
+                <button id="devo-complete-btn" onclick="completeDevotional()" class="bg-stone-400 hover:bg-stone-500 dark:bg-stone-700 dark:hover:bg-stone-600 text-stone-100 dark:text-stone-100 px-6 py-3 rounded-lg font-medium transition-colors shadow-sm">
+                    Anotar no Caderno & Concluir
+                </button>
+            </div>
+        </section>
+
+        <section id="print-section" class="hidden bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-8">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="text-xl">🖨️</span>
+                <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Central de Impressão (Fichário A5)</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="p-4 border border-gray-50 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900/50 flex flex-col h-full">
+                    <h3 class="font-medium mb-4 text-sm text-gray-600 dark:text-gray-400 uppercase tracking-wider">Calendário Mensal (Paisagem)</h3>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <input type="number" id="print-month" value="5" min="1" max="12" class="w-16 p-2 rounded border dark:bg-gray-800 dark:border-gray-600 text-sm">
+                        <input type="number" id="print-year-month" value="2026" class="w-20 p-2 rounded border dark:bg-gray-800 dark:border-gray-600 text-sm">
+                        <button onclick="printMonthly()" class="flex-1 min-w-[100px] bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded transition-colors text-sm font-medium">
+                            Gerar PDF
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-4 border border-gray-50 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900/50 flex flex-col h-full">
+                    <h3 class="font-medium mb-4 text-sm text-gray-600 dark:text-gray-400 uppercase tracking-wider">Calendário Anual (Retrato)</h3>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <input type="number" id="print-year-annual" value="2026" class="w-24 p-2 rounded border dark:bg-gray-800 dark:border-gray-600 text-sm">
+                        <button onclick="printAnnual()" class="flex-1 min-w-[100px] bg-gray-800 hover:bg-black text-white px-3 py-2 rounded transition-colors text-sm font-medium">
+                            Gerar PDF
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-4 border border-gray-50 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900/50 flex flex-col h-full">
+                    <h3 class="font-medium mb-4 text-sm text-gray-600 dark:text-gray-400 uppercase tracking-wider">Log Diário (A5)</h3>
+                    <div class="flex mt-auto">
+                        <button onclick="printDailyLog()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded transition-colors text-sm font-medium">
+                            Imprimir Dia
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="mb-4">
+            <details class="group bg-indigo-50/50 dark:bg-gray-800/40 rounded-xl border border-indigo-100 dark:border-gray-700 mb-6 overflow-hidden">
+                <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-indigo-50 dark:hover:bg-gray-700/50 transition-colors">
+                    <div class="flex items-center gap-2">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold">🔁 Rotinas</span>
+                        <span id="recurring-count" class="text-[10px] bg-indigo-200 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 px-2 py-0.5 rounded-full font-bold">0</span>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-400 group-open:rotate-180 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </summary>
+                <ul id="recurring-task-list" class="divide-y divide-indigo-100/50 dark:divide-gray-700/50 border-t border-indigo-100 dark:border-gray-700">
+                    </ul>
+            </details>
+            <div id="date-slider" class="flex gap-3 overflow-x-auto pb-4 pt-2 w-full snap-x scrollbar-hide"></div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-100 dark:border-gray-700">
+            <ul id="task-list" class="divide-y divide-gray-200 dark:divide-gray-700">
+                </ul>
+        </div>
+
+        <section id="ai-panel" class="hidden bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-8 mt-6">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="text-xl">🧠</span>
+                <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Mentor IA</h2>
+            </div>
+            <input type="text" id="ai-custom-prompt" placeholder="Ex: Analise meus hábitos da última semana..." class="w-full px-4 py-2 mb-4 rounded-md border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-sm text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <button id="btn-analyze-new" onclick="generateAnalysis()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-6 py-2 rounded-md font-bold shadow-sm transition-all flex items-center justify-center gap-2 disabled:opacity-70">
+                Gerar Análise
+            </button>
+            <div id="ai-response" class="mt-6 prose dark:prose-invert max-w-none text-sm text-gray-700 dark:text-gray-300"></div>
+        </section>
+
+    </div>
+    
+    <script src="/static/app.js"></script>
+    
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // Importante: a barra inicial /static/sw.js define onde ele atua
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then(reg => console.log('Service Worker registrado com sucesso!', reg))
+                    .catch(err => console.error('Erro no Service Worker', err));
+            });
+        }
+    </script>
+</body>
+</html>

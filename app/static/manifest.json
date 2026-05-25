@@ -1,0 +1,22 @@
+{
+  "name": "Daily-HUB",
+  "short_name": "Daily",
+  "description": "Seu HUB de tarefas e captura rápida",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#4F46E5",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/static/icon.png",
+      "sizes": "any",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
