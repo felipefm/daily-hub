@@ -86,6 +86,56 @@ daily-hub/
 
 2.  **Configuração**:
     *   Configure as variáveis de ambiente necessárias (ex: no arquivo `.env` ou `docker-compose.yml`).
+  
+```
+name: daily-hub
+services:
+    api:
+        cpu_shares: 90
+        command:
+            - bash
+            - -c
+            - pip install --no-cache-dir fastapi uvicorn sqlalchemy requests pydantic reportlab python-multipart &&  uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+        container_name: daily-hub-api
+        deploy:
+            resources:
+                limits:
+                    memory: "8136949760"
+        environment:
+            LM_STUDIO_URL: http://192.168.0.10:1234/v1
+        hostname: daily-hub-api
+        image: python:3.11-slim
+        networks:
+            default: null
+        ports:
+            - mode: ingress
+              target: 8000
+              published: "8080"
+              protocol: tcp
+        restart: unless-stopped
+        volumes:
+            - type: bind
+              source: /DATA/AppData/daily-hub/app
+              target: /app
+              bind:
+                create_host_path: true
+        working_dir: /app
+networks:
+    default:
+        name: daily-hub_default
+x-casaos:
+    author: self
+    category: self
+    hostname: ""
+    icon: ""
+    index: /
+    is_uncontrolled: false
+    port_map: ""
+    scheme: http
+    title:
+        custom: daily-hub
+
+```
 
 3.  **Execução**:
     *   Execute o comando `docker-compose up -d` na raiz do projeto.
