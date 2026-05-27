@@ -7,6 +7,7 @@
 
 # Ignorar arquivos temporários do Python
 __pycache__/
+*.pyc
 *.py[cod]
 *$py.class
 
@@ -16,3 +17,13 @@ env/
 
 # Ignorar arquivos de variáveis de ambiente com senhas (se você criar um no futuro)
 .env
+
+# Logs gerados pelos testes
+app/tests/logs/
+*.log
+
+# Cache do Pytest (arquivos temporários)
+.pytest_cache/
+
+# Pasta da documentação gerada do testes
+/docs/

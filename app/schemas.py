@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
 
@@ -6,8 +6,8 @@ from datetime import datetime
 
 class RoutineTemplateBase(BaseModel):
     """Schema base para Routine Template."""
-    title: str
-    recurrence_type: str  # Ex: "daily", "weekly", "monthly", "weekdays"
+    title: str = Field(..., min_length=1)
+    recurrence_type: str = Field(..., min_length=1)  # Ex: "daily", "weekly", "monthly", "weekdays"
 
 
 class RoutineTemplateCreate(RoutineTemplateBase):
@@ -34,7 +34,7 @@ class RoutineTemplateResponse(RoutineTemplateBase):
 
 class TaskBase(BaseModel):
     """Schema base para Task (log diário)."""
-    title: str
+    title: str = Field(..., min_length=1)
     date: Optional[str] = None  # Se não enviar, assumimos "hoje"
     description: Optional[str] = None
 
