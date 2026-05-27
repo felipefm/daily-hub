@@ -42,7 +42,7 @@ jobs:
     
     - name: Upload resultados dos testes
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: test-results-${{ matrix.python-version }}
         path: test-results.xml
@@ -60,7 +60,7 @@ jobs:
         name: codecov-umbrella
     
     - name: Publicar HTML de cobertura
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: coverage-report-${{ matrix.python-version }}
         path: htmlcov/
